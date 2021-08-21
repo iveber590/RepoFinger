@@ -1,0 +1,16 @@
+$site = Local\Project\Site::getList('ID', ['filter' => ['UF_ACTIVE' => true], 'order'=>["ID"=>"ASC"]]);
+$bDateTo = date("d.m.Y H:i:s", mktime(0, 0, 0, date("m"), date("d")));
+//получаем заказы у которых перевели статус в течении дня
+$setNewStatusOrders = Local\Hlblock\HistoryChanges::getList('ID',
+['filter'=>
+    [
+    	"UF_PROPERTY_CODE"=>['UF_STATUS'],
+    	"UF_VALUE_BEFORE"=>['P','K','C'],
+    	"!=UF_VALUE_AFTER"=>['P','K','C'],
+     '>UF_DATE'=>date("d.m.Y H:i:s", mktime(0, 0, 0, date("m"), date("d")))],
+'order'=>
+    ["UF_DATE"=>"ASC"],
+'select'=>
+	["ID","UF_ORDER_ID","UF_SITE"]
+// 'limit'=> 100
+]);
